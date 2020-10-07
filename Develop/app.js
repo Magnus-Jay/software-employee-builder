@@ -44,7 +44,7 @@ const employees = []
                case "Intern":
                   inquirer.prompt([{
                      type: 'input',
-                     message: 'What school do you attend?',
+                     message: 'What school did you attend?',
                      name: 'school'
                   }])
                   .then(function({school}){
@@ -64,20 +64,55 @@ const employees = []
                      })
                   })
                   //what else do we need to figure out the intern
-                
-             
-                  
                   break;
 
                case "Engineer":
-                  // take in github
-                  //
-                  //   createEngineer(employeeEmail, id);
+                  inquirer.prompt([{
+                     type: 'input',
+                     message: 'What is your GitHub name?',
+                     name: 'github'
+                  }])
+                  .then(function({github}){
+                    
+                     const newEngineer= new Engineer(id, name, email, github)
+                     employees.push(newEngineer)
+                     console.log('-------newIntern--------\n', newEngineer, '\n---------newIntern---------')
+                     return
+                  })
+                  .then(function(){
+                     fs.writeFile(outputPath, render(employees), 'utf8', function(err){
+                        if(err){
+                           console.log('ERROR_____>', err)
+                        } else {
+                           console.log('Wrote new HTML')
+                        }
+                     })
+                  })
+         
                   break;
 
                case "Manager":
-                  //take in officenumber
-                  //   createManager();
+                  inquirer.prompt([{
+                     type: 'input',
+                     message: 'What is your office number?',
+                     name: 'officeNumber'
+                  }])
+                  .then(function({officeNumber}){
+                    
+                     const newManager= new Manager(id, name, email, officeNumber)
+                     employees.push(newManager)
+                     console.log('-------newIntern--------\n', newManager, '\n---------newIntern---------')
+                     return
+                  })
+                  .then(function(){
+                     fs.writeFile(outputPath, render(employees), 'utf8', function(err){
+                        if(err){
+                           console.log('ERROR_____>', err)
+                        } else {
+                           console.log('Wrote new HTML')
+                        }
+                     })
+                  })
                   break;
             }
   })
