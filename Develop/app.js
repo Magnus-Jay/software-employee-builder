@@ -9,49 +9,83 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
-
+const employees = []
 
  function employeePick() {
-     inquirer.prompt({
-        type: "Input",
+     inquirer.prompt([{
+        type: "input",
         message: "Enter employee name",
-        name: "employee name"
+        name: "employeeName"
      },
-     {  type: "Input",
+     {  type: "input",
         message: "What is your employee number?",
-        name: "employee id"
+        name: "employeeId"
 
      },
      {  type: "email",
         message: "Please enter your employee email",
-        name: "employee email",
+        name:"employeeEmail",
 
      },
      {  type: "list",
         message: "What is your role?",
-        name: "employee id",
+        name:"employeeRole",
         choices: ["Engineer", "Intern", "Manager"]
-     }).then(function ({ choice }) {
-      switch (choice) {
-          case "Intern":
-            //   createIntern();
-              break;
+     }]).then(function(answers) {
 
-          case "Engineer":
-            //   createEngineer();
-              break;
+         const { employeeRole, employeeEmail, employeeId, employeeName} = answers
+         const id = employeeId
+         const role = employeeRole
+         const email = employeeEmail
+         const name = employeeName
 
-          case "Manager":
-            //   createManager();
-              break;
 
-      }
+            switch (role) {
+               case "Intern":
+                  inquirer.prompt([{
+                     type: 'input',
+                     message: 'What school do you attend?',
+                     name: 'school'
+                  }])
+                  .then(function({school}){
+                    
+                     const newIntern = new Intern(id, name, email, school)
+                     employees.push(newIntern)
+                     console.log('-------newIntern--------\n', newIntern, '\n---------newIntern---------')
+                     return
+                  })
+                  .then(function(){
+                     fs.writeFile(outputPath, render(employees), 'utf8', function(err){
+                        if(err){
+                           console.log('ERROR_____>', err)
+                        } else {
+                           console.log('Wrote new HTML')
+                        }
+                     })
+                  })
+                  //what else do we need to figure out the intern
+                
+             
+                  
+                  break;
+
+               case "Engineer":
+                  // take in github
+                  //
+                  //   createEngineer(employeeEmail, id);
+                  break;
+
+               case "Manager":
+                  //take in officenumber
+                  //   createManager();
+                  break;
+            }
   })
 
  }
    
 
- employeePick();
+employeePick()
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
